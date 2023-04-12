@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アンケート</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .chart-container {
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>アンケート：同意しますか？</h2>
+        <button id="yesBtn">はい</button>
+        <button id="noBtn">いいえ</button>
+        <button id="closeBtn" disabled>締め切る</button>
+
+        <div class="chart-container">
+            <canvas id="resultsChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let yesCount = 0;
+        let noCount = 0;
+
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const closeBtn = document.getElementById('closeBtn');
+
+        yesBtn.addEventListener('click', () => {
+            yesCount++;
+            closeBtn.disabled = false;
+        });
+
+        noBtn.addEventListener('click', () => {
+            noCount++;
+            closeBtn.disabled = false;
+        });
+
+        closeBtn.addEventListener('click', () => {
+            yesBtn.disabled = true;
+            noBtn.disabled = true;
+            closeBtn.disabled = true;
+            displayResults();
+        });
+
+        function displayResults() {
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+
+            const data = {
+                labels: ['はい', 'いいえ'],
+                datasets: [{
+                    data: [yesCount, noCount],
+                    backgroundColor: ['#4caf50', '#f44336'],
+                    hoverOffset: 4
+                }]
+            };
+
+            const config = {
+                type: 'pie',
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'アンケート結果'
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctx, config);
+        }
+    </script>
+</body>
+</html>
