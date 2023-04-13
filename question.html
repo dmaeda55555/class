@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>質問の受付</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .question-list {
+            list-style-type: none;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>質問を入力してください</h2>
+        <input type="text" id="questionInput">
+        <button id="submitBtn">質問を送信</button>
+        <h3>質問一覧</h3>
+        <ul id="questionList" class="question-list"></ul>
+    </div>
+
+    <script>
+        const questionInput = document.getElementById('questionInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const questionList = document.getElementById('questionList');
+
+        submitBtn.addEventListener('click', () => {
+            const question = questionInput.value.trim();
+            if (question) {
+                const li = document.createElement('li');
+                li.textContent = question;
+                questionList.appendChild(li);
+                questionInput.value = '';
+            }
+        });
+
+        questionInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                submitBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
