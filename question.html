@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>質問を受け付けます</title>
+    <title>質問の受付</title>
     <style>
         .container {
             display: flex;
@@ -13,9 +13,18 @@
             height: 100vh;
         }
 
-        .question-list {
-            list-style-type: none;
-            padding: 0;
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
@@ -25,20 +34,52 @@
         <input type="text" id="questionInput">
         <button id="submitBtn">質問を送信</button>
         <h3>質問一覧</h3>
-        <ul id="questionList" class="question-list"></ul>
+        <table id="questionTable">
+            <thead>
+                <tr>
+                    <th>質問番号</th>
+                    <th>質問内容</th>
+                    <th>質問時間</th>
+                </tr>
+            </thead>
+            <tbody id="questionList"></tbody>
+        </table>
     </div>
 
     <script>
         const questionInput = document.getElementById('questionInput');
         const submitBtn = document.getElementById('submitBtn');
         const questionList = document.getElementById('questionList');
+        let questionCount = 0;
+
+        function getFormattedTime(timestamp) {
+            const date = new Date(timestamp);
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            const seconds = date.getSeconds();
+            return `${hours}時${minutes}分${seconds}秒`;
+        }
 
         submitBtn.addEventListener('click', () => {
             const question = questionInput.value.trim();
             if (question) {
-                const li = document.createElement('li');
-                li.textContent = question;
-                questionList.appendChild(li);
+                questionCount++;
+                const tr = document.createElement('tr');
+
+                const tdNumber = document.createElement('td');
+                tdNumber.textContent = questionCount;
+                tr.appendChild(tdNumber);
+
+                const tdQuestion = document.createElement('td');
+                tdQuestion.textContent = question;
+                tr.appendChild(tdQuestion);
+
+                const tdTime = document.createElement('td');
+                const timestamp = new Date().getTime() + (9 * 60 * 60 * 1000); // 日本時間に変換（UTC+9）
+                tdTime.textContent = getFormattedTime(timestamp);
+                tr.appendChild(tdTime);
+
+                questionList.appendChild(tr);
                 questionInput.value = '';
             }
         });
@@ -51,3 +92,4 @@
     </script>
 </body>
 </html>
+
